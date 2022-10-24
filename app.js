@@ -1,7 +1,6 @@
 // # Import Express 
 const express = require('express');
 const expressLayout = require('express-ejs-layouts');
-const morgan = require('morgan');
 
 // # Jalankan express 
 const app = express();
@@ -16,23 +15,8 @@ app.set('view engine', 'ejs');
 // # Salah satu third-party middleware
 app.use(expressLayout);
 
-// # Jalankan Third-part middleware morgan 
-app.use(morgan('dev'));
-
 // # Built-in Middleware (express.static)
 app.use(express.static('public'));
-
-// # Application Level Middleware 1
-app.use((req, res, next) => {
-    console.info("Time: ", Date.now());
-    next();
-});
-
-// # Application Level Middleware 2
-app.use((req, res, next) => {
-    console.info("Ini adalah middleware ke-2!");
-    next();
-});
 
 // # Route Express: Route Halaman Utama
 app.get('/', (req, res) => {
@@ -79,13 +63,6 @@ app.get('/contact', (req, res) => {
     });
 });
 
-// # Route Express: Route Halaman /product
-app.get('/product/:idProd', (req, res) => {
-    // # Tangkap Parameter id & query
-    // => parameter: menggunakan properti req.params.nama_parameter
-    // => query: menggunakan properti req.query.nama_query
-    res.send(`Product with ID:  ${req.params.idProd} <br> Category ID: ${req.query.category}`);
-});
 
 // Middleware (Dijalankan Setiap Saat): Dijalankan ketika yang diakses bukan route berikut
 // => / 
