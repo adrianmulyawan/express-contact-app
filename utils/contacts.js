@@ -37,7 +37,7 @@ const findContact = (nama) => {
 // Menuliskan / Meninpa File contacts.json Dengan Data Baru
 const saveContacts = (contacts) => {
     // Ubah data contacts.json menjadi string
-    fs.writeFileSync('data/contacts.json', JSON.stringify(contacts));
+    fs.writeFileSync('data/contacts.json', JSON.stringify(contacts, null, 2));
 };
 
 // Method Menambahkan Data Contact Baru
@@ -45,6 +45,11 @@ const addContact = (contact) => {
     // Ambil semua file contacts.json dan simpan didalam variable contacts 
     // Bentuknya adalah object
     const contacts = loadContacts();
+
+    // Validation 
+    // 1. Cek Nama 
+    // 2. Cek Email
+    // 3. Cek Ponsel
 
     // Tambah objek baru kedalamnya
     contacts.push(contact);
