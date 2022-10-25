@@ -98,17 +98,22 @@ app.post('/contact', [
     // > Validation Phone Number
     check('ponsel', 'No Handphone Tidak Valid').isMobilePhone('id-ID'),
 ], (req, res) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-        return res.status(400).json({ errors: error.array() });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        // return res.status(400).json({ errors: error.array() });
+        res.render('add-contact', {
+            layout: 'partials/main-layout',
+            title: 'Add New Contact',
+            errors: errors.array(),
+        });
+    } else {
+        // req.body => mengambil data dari inputan form
+        addContact(req.body);
+
+        // Setelah berhasil simpan data kontak kita redirect
+        // redirect kehalaman /contact
+        res.redirect('/contact');
     }
-
-    // req.body => mengambil data dari inputan form
-    // addContact(req.body);
-
-    // Setelah berhasil simpan data kontak kita redirect
-    // redirect kehalaman /contact
-    // res.redirect('/contact');
 });
 
 // # Route Express: Halaman Detail Contact
