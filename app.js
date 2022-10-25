@@ -1,7 +1,7 @@
 // # Import Express 
 const express = require('express');
 const expressLayout = require('express-ejs-layouts');
-const { loadContacts } = require('./utils/contacts');
+const { loadContacts, findContact } = require('./utils/contacts');
 
 // # Jalankan express 
 const app = express();
@@ -68,6 +68,18 @@ app.get('/contact', (req, res) => {
     });
 });
 
+// # Route Express: Halaman Detail Contact
+app.get('/contact/:nama', (req, res) => {
+    const contact = findContact(req.params.nama);
+
+    console.info(contact);
+
+    res.render('detail',{
+        layout: 'partials/main-layout',
+        title: 'Detail Contact',
+        contact,
+    });
+});
 
 // Middleware (Dijalankan Setiap Saat): Dijalankan ketika yang diakses bukan route berikut
 // => / 
