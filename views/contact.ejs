@@ -12,19 +12,30 @@
                     <th scope="col">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Adrian Mulyawan</td>
-                    <td>adrianmulyawan666@gmail.com</td>
-                    <td>081258161143</td>
-                    <td>
-                        <a href="#" class="btn btn-success badge rounded-pill">
-                            <i class="bi bi-info-circle"></i> Detail
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
+            <% if (contacts.length < 1) { %>
+                <tbody>
+                    <tr>
+                        <td colspan="5">Belumm Ada Data Contact</td>
+                    </tr>
+                </tbody>
+            <% } else { %>
+                <% let urutan = 1 %>
+                <% contacts.forEach(contact => { %>
+                    <tbody>
+                        <tr>
+                            <th scope="row"><%= urutan++ %></th>
+                            <td><%= contact.nama %></td>
+                            <td><%= contact.email %></td>
+                            <td><%= contact.ponsel %></td>
+                            <td>
+                                <a href="" class="btn btn-success badge rounded-pill">
+                                    <i class="bi bi-info-circle"> </i>Detail
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                <% }); %> 
+            <% } %>
         </table>
     </div>
 </div>
