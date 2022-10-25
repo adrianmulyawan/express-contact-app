@@ -68,6 +68,14 @@ app.get('/contact', (req, res) => {
     });
 });
 
+// # Route Express: Route Halaman Tambah Contact 
+app.get('/contact/add', (req,res) => {
+    res.render('add-contact', {
+        layout: 'partials/main-layout',
+        title: 'Add New Contact',
+    })
+});
+
 // # Route Express: Halaman Detail Contact
 app.get('/contact/:nama', (req, res) => {
     const contact = findContact(req.params.nama);
