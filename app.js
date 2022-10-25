@@ -1,10 +1,13 @@
 // # Import Express 
 const express = require('express');
+const multer = require('multer');
 const expressLayout = require('express-ejs-layouts');
-const { loadContacts, findContact } = require('./utils/contacts');
+const { loadContacts, findContact, addContact } = require('./utils/contacts');
 
 // # Jalankan express 
 const app = express();
+// # Jalankan multer
+const upload = multer();
 
 // # Buat port untuk menjalankan express 
 const port = 3000;
@@ -15,9 +18,10 @@ app.set('view engine', 'ejs');
 // # Gunakan Express EJS Layout
 // # Salah satu third-party middleware
 app.use(expressLayout);
-
 // # Built-in Middleware (express.static)
 app.use(express.static('public'));
+// # Midlleware Menangkap Data Dari Inputan Form (url encoded)
+app.use(upload.array());
 
 // # Route Express: Route Halaman Utama
 app.get('/', (req, res) => {
@@ -74,6 +78,16 @@ app.get('/contact/add', (req,res) => {
         layout: 'partials/main-layout',
         title: 'Add New Contact',
     })
+});
+
+// # Route Express: Proses Tambah Data Contact 
+app.post('/contact', (req, res) => {
+    // req.body => mengambil data dari inputan form
+    addContact(req.body);
+
+    // Setelah berhasil simpan data kontak kita redirect
+    // redirect kehalaman /contact
+    res.redirect('/contact');
 });
 
 // # Route Express: Halaman Detail Contact
