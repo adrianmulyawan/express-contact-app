@@ -22,6 +22,18 @@ const loadContacts = () => {
     return fileData;
 };
 
+// Method Yang Menampilkan Detail Contact (Berdasarkan Nama)
+const findContact = (nama) => {
+    const contacts = loadContacts();
+
+    const contact = contacts.find((contact) => {
+        return contact.nama.toLowerCase() === nama.toLowerCase()
+    });
+
+    return contact;
+}
+
 module.exports = {
     loadContacts,
+    findContact
 };
