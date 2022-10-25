@@ -2,7 +2,8 @@
 const express = require('express');
 const multer = require('multer');
 const expressLayout = require('express-ejs-layouts');
-const { loadContacts, findContact, addContact } = require('./utils/contacts');
+const { loadContacts, findContact, addContact, checkDuplicate } = require('./utils/contacts');
+const { body, validationResult, check } = require('express-validator');
 
 // # Jalankan express 
 const app = express();
@@ -21,6 +22,7 @@ app.use(expressLayout);
 // # Built-in Middleware (express.static)
 app.use(express.static('public'));
 // # Midlleware Menangkap Data Dari Inputan Form (url encoded)
+// app.use(express.urlencoded({ extended: true }));
 app.use(upload.array());
 
 // # Route Express: Route Halaman Utama
@@ -81,13 +83,32 @@ app.get('/contact/add', (req,res) => {
 });
 
 // # Route Express: Proses Tambah Data Contact 
-app.post('/contact', (req, res) => {
+app.post('/contact', [
+    // Validation => using express-validator
+    // > Custom Validation
+    body('nama').custom((value) => {
+        const duplicate = checkDuplicate(value);
+        if (duplicate) {
+            throw new Error('Nama Kontak Telah Terdaftar');
+        }
+        return true;
+    }),
+    // > Validation Email
+    check('email', 'Email Tidak Valid').isEmail(),
+    // > Validation Phone Number
+    check('ponsel', 'No Handphone Tidak Valid').isMobilePhone('id-ID'),
+], (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+        return res.status(400).json({ errors: error.array() });
+    }
+
     // req.body => mengambil data dari inputan form
-    addContact(req.body);
+    // addContact(req.body);
 
     // Setelah berhasil simpan data kontak kita redirect
     // redirect kehalaman /contact
-    res.redirect('/contact');
+    // res.redirect('/contact');
 });
 
 // # Route Express: Halaman Detail Contact
