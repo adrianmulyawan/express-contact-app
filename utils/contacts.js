@@ -1,5 +1,4 @@
 const fs = require('fs');
-const { saveContact } = require('../../9ContactApp/contacts');
 
 // Cek Folder "data/" Jika Tidak Ada Buat Folder-nya
 const dirPath = './data';
@@ -45,11 +44,6 @@ const addContact = (contact) => {
     // Ambil semua file contacts.json dan simpan didalam variable contacts 
     // Bentuknya adalah object
     const contacts = loadContacts();
-
-    // Validation 
-    // 1. Cek Nama 
-    // 2. Cek Email
-    // 3. Cek Ponsel
 
     // Tambah objek baru kedalamnya
     contacts.push(contact);
