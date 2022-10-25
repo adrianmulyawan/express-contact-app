@@ -60,8 +60,6 @@ app.get('/contact', (req, res) => {
     // Menampung seluruh contacts (from data/contacts.json)
     const contacts = loadContacts();
 
-    console.info(contacts);
-
     // > Gunakan Templating Engine EJS 
     res.render('contact', {
         layout: 'partials/main-layout',
