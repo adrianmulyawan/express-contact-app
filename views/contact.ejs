@@ -19,22 +19,22 @@
                     </tr>
                 </tbody>
             <% } else { %>
-                <% let urutan = 1 %>
-                <% contacts.forEach(contact => { %>
-                    <tbody>
+                <tbody>
+                    <% contacts.forEach((contact, index) => { %>
+                        <% index++ %>
                         <tr>
-                            <th scope="row"><%= urutan++ %></th>
+                            <th scope="row"><%= index++ %></th>
                             <td><%= contact.nama %></td>
                             <td><%= contact.email %></td>
                             <td><%= contact.ponsel %></td>
                             <td>
-                                <a href="" class="btn btn-success badge rounded-pill">
+                                <a href="/contact/<%= contact.nama %>" class="btn btn-success badge rounded-pill">
                                     <i class="bi bi-info-circle"> </i>Detail
                                 </a>
                             </td>
                         </tr>
-                    </tbody>
-                <% }); %> 
+                    <% }); %> 
+                </tbody>
             <% } %>
         </table>
     </div>
