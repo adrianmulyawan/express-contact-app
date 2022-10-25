@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { saveContact } = require('../../9ContactApp/contacts');
 
 // Cek Folder "data/" Jika Tidak Ada Buat Folder-nya
 const dirPath = './data';
@@ -33,7 +34,27 @@ const findContact = (nama) => {
     return contact;
 }
 
+// Menuliskan / Meninpa File contacts.json Dengan Data Baru
+const saveContacts = (contacts) => {
+    // Ubah data contacts.json menjadi string
+    fs.writeFileSync('data/contacts.json', JSON.stringify(contacts));
+};
+
+// Method Menambahkan Data Contact Baru
+const addContact = (contact) => {
+    // Ambil semua file contacts.json dan simpan didalam variable contacts 
+    // Bentuknya adalah object
+    const contacts = loadContacts();
+
+    // Tambah objek baru kedalamnya
+    contacts.push(contact);
+
+    // Timpa kedalam method saveContacts()
+    saveContacts(contacts);
+};
+
 module.exports = {
     loadContacts,
-    findContact
+    findContact,
+    addContact,
 };
