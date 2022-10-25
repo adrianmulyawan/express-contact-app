@@ -72,8 +72,6 @@ app.get('/contact', (req, res) => {
 app.get('/contact/:nama', (req, res) => {
     const contact = findContact(req.params.nama);
 
-    console.info(contact);
-
     res.render('detail',{
         layout: 'partials/main-layout',
         title: 'Detail Contact',
