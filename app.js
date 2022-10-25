@@ -1,6 +1,7 @@
 // # Import Express 
 const express = require('express');
 const expressLayout = require('express-ejs-layouts');
+const { loadContacts } = require('./utils/contacts');
 
 // # Jalankan express 
 const app = express();
