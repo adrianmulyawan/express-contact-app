@@ -38,7 +38,6 @@ const saveContacts = (contacts) => {
     // Ubah data contacts.json menjadi string
     fs.writeFileSync('data/contacts.json', JSON.stringify(contacts, null, 2));
 };
-
 // Method Menambahkan Data Contact Baru
 const addContact = (contact) => {
     // Ambil semua file contacts.json dan simpan didalam variable contacts 
@@ -59,9 +58,25 @@ const checkDuplicate = (nama) => {
     return contacts.find((contact) => contact.nama === nama);
 };
 
+// Method Hapus Kontak
+const deleteContact = (nama) => {
+    // Ambil data contact from data/contacts.json
+    const contacts = loadContacts();
+
+    // Telusuri / cari object contact yang bukan nama
+    // Kita akan menghilangkan kontak berdasarkan nama yang dikirim
+    // Disimpan kedalam newContact
+    const newContact = contacts.filter((contact) => {
+        return contact.nama.toLowerCase() !== nama.toLowerCase();
+    });
+
+    saveContacts(newContact);
+};
+
 module.exports = {
     loadContacts,
     findContact,
     addContact,
     checkDuplicate,
+    deleteContact,
 };
