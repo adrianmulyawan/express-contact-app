@@ -4,6 +4,9 @@ const multer = require('multer');
 const expressLayout = require('express-ejs-layouts');
 const { loadContacts, findContact, addContact, checkDuplicate } = require('./utils/contacts');
 const { body, validationResult, check } = require('express-validator');
+const session = require('express-session');
+const cookieParser = require('cookie-parser')
+const flash = require('connect-flash');
 
 // # Jalankan express 
 const app = express();
@@ -24,6 +27,18 @@ app.use(express.static('public'));
 // # Midlleware Menangkap Data Dari Inputan Form (url encoded)
 // app.use(express.urlencoded({ extended: true }));
 app.use(upload.array());
+
+// # Konfigurasi Flash
+app.use(cookieParser('secret'));
+app.use(
+    session({
+        cookie: { maxAge: 6000 },
+        secret: 'secret',
+        resave: true,
+        saveUninitialized: true,
+    })
+);
+app.use(flash());
 
 // # Route Express: Route Halaman Utama
 app.get('/', (req, res) => {
@@ -71,6 +86,7 @@ app.get('/contact', (req, res) => {
         layout: 'partials/main-layout',
         title: 'Contact',
         contacts: contacts,
+        msg: req.flash('msg'), // tangkap flash message
     });
 });
 
@@ -109,6 +125,9 @@ app.post('/contact', [
     } else {
         // req.body => mengambil data dari inputan form
         addContact(req.body);
+
+        // Kirim flash message
+        req.flash('msg', 'Data Kontak Berhasil Ditambahkan');
 
         // Setelah berhasil simpan data kontak kita redirect
         // redirect kehalaman /contact
