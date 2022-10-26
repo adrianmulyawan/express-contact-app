@@ -2,7 +2,7 @@
 const express = require('express');
 const multer = require('multer');
 const expressLayout = require('express-ejs-layouts');
-const { loadContacts, findContact, addContact, checkDuplicate, deleteContact } = require('./utils/contacts');
+const { loadContacts, findContact, addContact, checkDuplicate, deleteContact, updateContacts } = require('./utils/contacts');
 const { body, validationResult, check } = require('express-validator');
 const session = require('express-session');
 const cookieParser = require('cookie-parser')
@@ -155,6 +155,56 @@ app.get('/contact/delete/:nama', (req, res) => {
     }
 });
 
+// # Route Express: Route Halaman Form Edit Data
+app.get('/contact/edit/:nama', (req,res) => {
+    // Cari Data Kontak
+    const contact = findContact(req.params.nama);
+
+    res.render('edit-contact', {
+        layout: 'partials/main-layout',
+        title: 'Edit Contact',
+        contact: contact,
+    });
+});
+
+// # Route Express: Route Proses Edit Data 
+app.post('/contact/update', [
+    // Validation => using express-validator
+    // > Custom Validation
+    body('nama').custom((value, { req }) => {
+        const duplicate = checkDuplicate(value);
+        if (value !== req.body.oldNama && duplicate) {
+            throw new Error('Nama Kontak Telah Terdaftar');
+        }
+        return true;
+    }),
+    // > Validation Email
+    check('email', 'Email Tidak Valid').isEmail(),
+    // > Validation Phone Number
+    check('ponsel', 'No Handphone Tidak Valid').isMobilePhone('id-ID'),
+], (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        // return res.status(400).json({ errors: error.array() });
+        res.render('edit-contact', {
+            layout: 'partials/main-layout',
+            title: 'Edit Contact',
+            errors: errors.array(),
+            contact: req.body,
+        });
+    } else {
+        // req.body => mengambil data dari inputan form
+        updateContacts(req.body);
+
+        // Kirim flash message
+        req.flash('msg', 'Data Kontak Berhasil Diubah');
+
+        // Setelah berhasil simpan data kontak kita redirect
+        // redirect kehalaman /contact
+        res.redirect('/contact');
+    }
+});
+
 // # Route Express: Halaman Detail Contact
 app.get('/contact/:nama', (req, res) => {
     const contact = findContact(req.params.nama);
@@ -165,7 +215,6 @@ app.get('/contact/:nama', (req, res) => {
         contact,
     });
 });
-
 
 // Middleware (Dijalankan Setiap Saat): Dijalankan ketika yang diakses bukan route berikut
 // => / 
