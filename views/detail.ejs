@@ -13,7 +13,10 @@
                 <h5 class="card-title"><%= contact.nama %></h5>
                 <h6 class="card-subtitle mb-2 text-muted"><%= contact.ponsel %></h6>
                 <p class="card-text"><%= contact.email %></p>
-
+                
+                <a href="/contact/edit/<%= contact.nama %>" class="btn btn-info badge">
+                    Edit
+                </a>
                 <a href="/contact/delete/<%= contact.nama %>" class="btn btn-danger badge" onclick="return confirm('Apakah Anda Yakin?')">
                     Hapus
                 </a>
