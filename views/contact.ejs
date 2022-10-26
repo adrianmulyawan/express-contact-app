@@ -4,6 +4,12 @@
 
         <a href="/contact/add" class="btn btn-md btn-primary mb-2">Tambah Kontak</a>
 
+        <% if (msg.length !== 0) { %>
+            <div class="alert alert-success" role="alert">
+                <%= msg %>
+            </div>
+        <% } %>
+
         <table class="table">
             <thead>
                 <tr>
