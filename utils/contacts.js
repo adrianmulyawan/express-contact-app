@@ -73,10 +73,31 @@ const deleteContact = (nama) => {
     saveContacts(newContact);
 };
 
+// Method Mengubah Kontak 
+const updateContacts = (contactBaru) => {
+    // Panggil kontak
+    const contacts = loadContacts();
+
+    // Hilangkan kontak lama yang namanya sama == oldNama
+    const newContact = contacts.filter((contact) => {
+        return contact.nama.toLowerCase() !== contactBaru.oldNama.toLowerCase();
+    });
+
+    // Hapus oldNama
+    delete contactBaru.oldNama;
+    
+    // Simpan contact baru kedalam array
+    newContact.push(contactBaru);
+
+    // simpan kontak baru kedalam contacts.json
+    saveContacts(newContact);
+}
+
 module.exports = {
     loadContacts,
     findContact,
     addContact,
     checkDuplicate,
     deleteContact,
+    updateContacts,
 };
