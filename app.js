@@ -2,7 +2,7 @@
 const express = require('express');
 const multer = require('multer');
 const expressLayout = require('express-ejs-layouts');
-const { loadContacts, findContact, addContact, checkDuplicate } = require('./utils/contacts');
+const { loadContacts, findContact, addContact, checkDuplicate, deleteContact } = require('./utils/contacts');
 const { body, validationResult, check } = require('express-validator');
 const session = require('express-session');
 const cookieParser = require('cookie-parser')
@@ -135,6 +135,26 @@ app.post('/contact', [
     }
 });
 
+// # Route Express: Delete Contact
+app.get('/contact/delete/:nama', (req, res) => {
+    // Cek Kontak
+    const contact = findContact(req.params.nama);
+
+    // Jika kontak tidak ada
+    if (!contact) {
+        res.status(404);
+        res.send('<h1>Sorry, Kontak Tidak Ditemukan!</h1>');
+    } else {
+        deleteContact(req.params.nama);
+        // Kirim flash message
+        req.flash('msg', 'Data Kontak Berhasil Dihapus');
+
+        // Setelah berhasil simpan data kontak kita redirect
+        // redirect kehalaman /contact
+        res.redirect('/contact');
+    }
+});
+
 // # Route Express: Halaman Detail Contact
 app.get('/contact/:nama', (req, res) => {
     const contact = findContact(req.params.nama);
@@ -145,6 +165,7 @@ app.get('/contact/:nama', (req, res) => {
         contact,
     });
 });
+
 
 // Middleware (Dijalankan Setiap Saat): Dijalankan ketika yang diakses bukan route berikut
 // => / 
